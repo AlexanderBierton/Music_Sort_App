@@ -34,17 +34,7 @@ namespace Car_Music_Sort
         {
             if (Name.Length == 0)
                 Name = Path.Substring(Path.LastIndexOf('\\') + 1);
-            TabPage newTabPage = new TabPage(Name);
-
-            MusicListView newListView = new MusicListView(Path);
-            newListView.Dock = DockStyle.Fill;
-            newListView.Width = newTabPage.Width;
-            newListView.Height = newTabPage.Height;
-            
-            ListViewItem item = new ListViewItem();
-
-            newTabPage.Controls.Add(newListView);
-            MusicLists.Add(newListView);
+            MusicTabPage newTabPage = new MusicTabPage(Name, Path);
 
             directoryTabContainer.TabPages.Add(newTabPage);
             directoryTabContainer.SelectedIndex = directoryTabContainer.TabCount - 1;

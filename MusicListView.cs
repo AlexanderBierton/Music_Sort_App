@@ -13,6 +13,8 @@ namespace Car_Music_Sort
         private string folderPath;
         private List<MusicListViewItem> musicListViewItems;
 
+        public long FolderSize = 0;
+
         public MusicListView(string folderPath)
             : base()
         {
@@ -39,11 +41,11 @@ namespace Car_Music_Sort
             this.Columns.Add(headerFirst);
             this.Columns.Add(headerSecond);
 
-            this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            //this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
-            this.GetFolderMusic();
+            //this.GetFolderMusic();
 
-            this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+           // this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         public void GetFolderMusic()
@@ -62,6 +64,7 @@ namespace Car_Music_Sort
                         MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
                         
                         this.Items.Add(musicItem);
+                        this.FolderSize += file.Length;
                     }
                 }));
             }
@@ -72,7 +75,9 @@ namespace Car_Music_Sort
                 foreach (FileInfo file in info.EnumerateFiles())
                 {
                     MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
+
                     this.Items.Add(musicItem);
+                    this.FolderSize += file.Length;
                 }
             }
         }
