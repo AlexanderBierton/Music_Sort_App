@@ -11,6 +11,8 @@ namespace Car_Music_Sort
     class MusicTabPage : TabPage
     {
         public MusicListView musicListView;
+        public long FolderSize = 0;
+        public int FileCount = 0;
 
         public string FolderPath;
 
@@ -44,7 +46,8 @@ namespace Car_Music_Sort
                         MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
 
                         musicListView.Items.Add(musicItem);
-                        musicListView.FolderSize += file.Length;
+                        this.FolderSize += file.Length;
+                        this.FileCount += 1;
                     }
                 }));
             }
@@ -56,7 +59,8 @@ namespace Car_Music_Sort
                 {
                     MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
                     musicListView.Items.Add(musicItem);
-                    musicListView.FolderSize += file.Length;
+                    this.FolderSize += file.Length;
+                    this.FileCount += 1;
                 }
             }
             

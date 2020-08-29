@@ -12,12 +12,11 @@ namespace Car_Music_Sort
 {
     public partial class Form1 : Form
     {
-        List<MusicListView> MusicLists;
+        List<MusicTabPage> MusicFolders;
         public Form1()
         {
             InitializeComponent();
-
-            MusicLists = new List<MusicListView>();
+            MusicFolders = new List<MusicTabPage>();
         }
 
         private void AddFolder(object sender, EventArgs e)
@@ -37,8 +36,40 @@ namespace Car_Music_Sort
             MusicTabPage newTabPage = new MusicTabPage(Name, Path);
 
             directoryTabContainer.TabPages.Add(newTabPage);
+            MusicFolders.Add(newTabPage);
             directoryTabContainer.SelectedIndex = directoryTabContainer.TabCount - 1;
+            this.GetFolderOverview();
         }
 
+        private void OnTabChanged(object sender, EventArgs e)
+        {
+            this.GetFolderOverview();
+        }
+
+        private void GetFolderOverview(int index = -1)
+        {
+            if (index == -1)
+                index = directoryTabContainer.SelectedIndex;
+
+            int fileCount = MusicFolders[index].FileCount;
+            long folderSize = MusicFolders[index].FolderSize;
+
+            lblFolderCount.Text = fileCount.ToString();
+            Console.WriteLine(folderSize / 1024);
+            lblFolderSize.Text = FormatBytes(folderSize);
+        }
+
+        private static string FormatBytes(long bytes)
+        {
+            string[] Suffix = { "B", "KB", "MB", "GB" };
+            int i;
+            double dblSByte = bytes;
+            for (i = 0; i < Suffix.Length && bytes >= 1024; i++, bytes /= 1024)
+            {
+                dblSByte = bytes / 1024.0;
+            }
+
+            return String.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
+        }
     }
 }
