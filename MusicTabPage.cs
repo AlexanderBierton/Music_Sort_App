@@ -11,6 +11,7 @@ namespace Car_Music_Sort
     class MusicTabPage : TabPage
     {
         public MusicListView musicListView;
+        public List<MusicListViewItem> musicItems;
         public long FolderSize = 0;
         public int FileCount = 0;
 
@@ -22,15 +23,26 @@ namespace Car_Music_Sort
             this.Name = name;
             this.Text = name;
             this.FolderPath = folderPath;
+            this.musicItems = new List<MusicListViewItem>();
 
             musicListView = new MusicListView(folderPath);
             musicListView.Dock = DockStyle.Fill;
             musicListView.Width = this.Width;
             musicListView.Height = this.Height;
 
+            musicListView.MouseDoubleClick += new MouseEventHandler(OnDoubleClick);
+
             this.Controls.Add(musicListView);
 
             this.PopulateListView();
+        }
+
+        public void OnDoubleClick(object sender, EventArgs args)
+        {
+            MusicListViewItem items = (MusicListViewItem) musicListView.SelectedItems[0];
+
+            FileInfoDialog file = new FileInfoDialog(new FileInfo(items.filePath));
+            file.ShowDialog(this);
         }
 
         private void PopulateListView()
@@ -49,6 +61,7 @@ namespace Car_Music_Sort
                             MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
 
                             musicListView.Items.Add(musicItem);
+                            musicItems.Add(musicItem);
                             
                             this.FileCount += 1;
                         }
@@ -67,7 +80,8 @@ namespace Car_Music_Sort
                         MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
 
                         musicListView.Items.Add(musicItem);
-                        
+                        musicItems.Add(musicItem);
+
                         this.FileCount += 1;
                     }
                 }

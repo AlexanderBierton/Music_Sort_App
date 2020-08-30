@@ -14,6 +14,8 @@ namespace Car_Music_Sort
     public partial class Form1 : Form
     {
         List<MusicTabPage> MusicFolders;
+        string CurrentActionFile;
+
         public Form1()
         {
             InitializeComponent();
@@ -56,7 +58,6 @@ namespace Car_Music_Sort
             long folderSize = MusicFolders[index].FolderSize;
 
             lblFolderCount.Text = fileCount.ToString();
-            Console.WriteLine(folderSize / 1024);
             lblFolderSize.Text = FormatBytes(folderSize);
         }
 
@@ -82,23 +83,34 @@ namespace Car_Music_Sort
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                string exportFolder = dialog.SelectedPath + '\\';
-
-                foreach(MusicTabPage page in MusicFolders)
-                {
-                    foreach(MusicListViewItem item in page.musicListView.Items)
-                    {
-                        FileInfo file = new FileInfo(item.filePath);
-                        string newFileName = TrimFileName(file.Name);
-
-                        if (File.Exists(exportFolder + newFileName))
-                            continue;
-                        else
-                            file.CopyTo(exportFolder + newFileName);
-                        
-                    }
-                }
+                ShowProgressPanel("Transferring playlists", "Transferring");
+                backgroundWorker.RunWorkerAsync(argument:  dialog.SelectedPath + '\\');
             }
+        }
+
+        private void ShowProgressPanel(string title, string action)
+        {
+            lblProgTitle.Text = title;
+            lblProgAction.Text = action;
+
+            progressBar.Maximum = 100;
+            progressBar.Value = 0;
+            progressBar.Step = 1;
+
+            progressPanel.Visible = true;
+
+        }
+
+        private void HideProgressPanel()
+        {
+            progressPanel.Visible = false;
+            lblProgTitle.Text = String.Empty;
+            lblProgAction.Text = String.Empty;
+            lblActionOn.Text = String.Empty;
+
+            progressBar.Maximum = 100;
+            progressBar.Value = 0;
+            progressBar.Step = 1;
         }
 
         private string TrimFileName(string fileName)
@@ -133,12 +145,67 @@ namespace Car_Music_Sort
             if (endChar > 0)
                 name = name.Substring(0, endChar + 1);
 
-            if (fileName == "_45_.mp3")
-                Console.WriteLine(fileName);
-
             fileName = name + extension;
 
             return fileName;
+        }
+
+        private void progressBar1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Do_Work(object sender, DoWorkEventArgs e)
+        {
+            string exportFolder = (string) e.Argument;
+            int totalFiles = 0;
+            foreach (MusicTabPage page in MusicFolders)
+            {
+                totalFiles += page.FileCount;
+            }
+
+            int fileCount = 0;
+            foreach (MusicTabPage page in MusicFolders)
+            {
+                foreach (MusicListViewItem item in page.musicItems)
+                {
+                    FileInfo file = new FileInfo(item.filePath);
+                    Action action = () => lblActionOn.Text = file.Name;
+                    lblActionOn.Invoke(action);
+                    CurrentActionFile = file.Name;
+                    string newFileName = TrimFileName(file.Name);
+
+                    if (File.Exists(exportFolder + newFileName))
+                    {
+                        fileCount++;
+                        backgroundWorker.ReportProgress((fileCount * 100) / totalFiles);
+                        continue;
+                    } 
+                    else
+                    {
+                        fileCount++;
+                        backgroundWorker.ReportProgress((fileCount * 100) / totalFiles);
+                        file.CopyTo(exportFolder + newFileName);
+                    }
+                }
+            }
+        }
+
+        private void On_Progress_Changed(object sender, ProgressChangedEventArgs e)
+        {
+            //lblActionOn.Text = CurrentActionFile;
+            progressBar.Value = e.ProgressPercentage;
+        }
+
+        private void On_Worker_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show(this, "Files Successfully Transferred", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
+            HideProgressPanel();
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

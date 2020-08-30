@@ -7,14 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Car_Music_Sort
 {
-    public partial class ProgressPopup : Form
+    public partial class FileInfoDialog : Form
     {
-        public ProgressPopup()
+        public FileInfoDialog(FileInfo file)
         {
             InitializeComponent();
+
+            lblFileName.Text = file.Name;
+            lblFilePath.Text = file.FullName;
+            lblFileSize.Text = MusicHelper.FormatBytes(file.Length);
         }
     }
 }

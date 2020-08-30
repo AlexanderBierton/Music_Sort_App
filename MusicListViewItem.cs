@@ -42,6 +42,7 @@ namespace Car_Music_Sort
             this.SubItems.Add(this.fileName);
             this.SubItems[0].Text = this.fileName;
             this.SubItems[1].Text = _fileStatus.ToString();
+            
         }
 
     }

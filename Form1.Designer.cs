@@ -32,6 +32,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryTabContainer = new System.Windows.Forms.TabControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -44,10 +45,18 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.addFolderBtn = new System.Windows.Forms.ToolStripButton();
             this.exportPlaylistBtn = new System.Windows.Forms.ToolStripButton();
-            this.exportPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.progressPanel = new System.Windows.Forms.Panel();
+            this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lblProgTitle = new System.Windows.Forms.Label();
+            this.lblProgAction = new System.Windows.Forms.Label();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblActionOn = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.progressPanel.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -74,20 +83,26 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // addFolderToolStripMenuItem
             // 
             this.addFolderToolStripMenuItem.Name = "addFolderToolStripMenuItem";
-            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.addFolderToolStripMenuItem.Text = "Add Folder";
             this.addFolderToolStripMenuItem.Click += new System.EventHandler(this.AddFolder);
+            // 
+            // exportPlaylistsToolStripMenuItem
+            // 
+            this.exportPlaylistsToolStripMenuItem.Name = "exportPlaylistsToolStripMenuItem";
+            this.exportPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.exportPlaylistsToolStripMenuItem.Text = "Export Playlists";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // directoryTabContainer
@@ -98,7 +113,7 @@
             this.directoryTabContainer.Location = new System.Drawing.Point(12, 174);
             this.directoryTabContainer.Name = "directoryTabContainer";
             this.directoryTabContainer.SelectedIndex = 0;
-            this.directoryTabContainer.Size = new System.Drawing.Size(496, 439);
+            this.directoryTabContainer.Size = new System.Drawing.Size(496, 436);
             this.directoryTabContainer.TabIndex = 2;
             this.directoryTabContainer.SelectedIndexChanged += new System.EventHandler(this.OnTabChanged);
             // 
@@ -228,17 +243,88 @@
             this.exportPlaylistBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.exportPlaylistBtn.Click += new System.EventHandler(this.ExportPlaylists);
             // 
-            // exportPlaylistsToolStripMenuItem
+            // progressPanel
             // 
-            this.exportPlaylistsToolStripMenuItem.Name = "exportPlaylistsToolStripMenuItem";
-            this.exportPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exportPlaylistsToolStripMenuItem.Text = "Export Playlists";
+            this.progressPanel.Controls.Add(this.tableLayoutPanel2);
+            this.progressPanel.Controls.Add(this.lblProgTitle);
+            this.progressPanel.Controls.Add(this.progressBar);
+            this.progressPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressPanel.Location = new System.Drawing.Point(0, 525);
+            this.progressPanel.Name = "progressPanel";
+            this.progressPanel.Size = new System.Drawing.Size(520, 100);
+            this.progressPanel.TabIndex = 5;
+            this.progressPanel.Visible = false;
+            // 
+            // backgroundWorker
+            // 
+            this.backgroundWorker.WorkerReportsProgress = true;
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Do_Work);
+            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.On_Progress_Changed);
+            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.On_Worker_Completed);
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(12, 65);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(493, 23);
+            this.progressBar.TabIndex = 0;
+            this.progressBar.Click += new System.EventHandler(this.progressBar1_Click);
+            // 
+            // lblProgTitle
+            // 
+            this.lblProgTitle.AutoSize = true;
+            this.lblProgTitle.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgTitle.Location = new System.Drawing.Point(9, 3);
+            this.lblProgTitle.Name = "lblProgTitle";
+            this.lblProgTitle.Size = new System.Drawing.Size(36, 18);
+            this.lblProgTitle.TabIndex = 1;
+            this.lblProgTitle.Text = "Title";
+            // 
+            // lblProgAction
+            // 
+            this.lblProgAction.AutoSize = true;
+            this.lblProgAction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblProgAction.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgAction.Location = new System.Drawing.Point(3, 0);
+            this.lblProgAction.Name = "lblProgAction";
+            this.lblProgAction.Size = new System.Drawing.Size(125, 25);
+            this.lblProgAction.TabIndex = 2;
+            this.lblProgAction.Text = "Action";
+            this.lblProgAction.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.57201F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.42799F));
+            this.tableLayoutPanel2.Controls.Add(this.lblProgAction, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblActionOn, 1, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 34);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(493, 25);
+            this.tableLayoutPanel2.TabIndex = 3;
+            this.tableLayoutPanel2.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
+            // 
+            // lblActionOn
+            // 
+            this.lblActionOn.AutoSize = true;
+            this.lblActionOn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblActionOn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblActionOn.Location = new System.Drawing.Point(134, 0);
+            this.lblActionOn.Name = "lblActionOn";
+            this.lblActionOn.Size = new System.Drawing.Size(356, 25);
+            this.lblActionOn.TabIndex = 3;
+            this.lblActionOn.Text = "Action On";
+            this.lblActionOn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(520, 625);
+            this.Controls.Add(this.progressPanel);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.directoryTabContainer);
@@ -252,6 +338,10 @@
             this.tableLayoutPanel1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.progressPanel.ResumeLayout(false);
+            this.progressPanel.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,6 +366,13 @@
         private System.Windows.Forms.Label lblTotalTime;
         private System.Windows.Forms.ToolStripButton exportPlaylistBtn;
         private System.Windows.Forms.ToolStripMenuItem exportPlaylistsToolStripMenuItem;
+        private System.Windows.Forms.Panel progressPanel;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Label lblProgAction;
+        private System.Windows.Forms.Label lblActionOn;
+        private System.Windows.Forms.Label lblProgTitle;
     }
 }
 

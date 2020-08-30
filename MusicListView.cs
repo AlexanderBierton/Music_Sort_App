@@ -62,7 +62,7 @@ namespace Car_Music_Sort
                     foreach (FileInfo file in info.EnumerateFiles())
                     {
                         MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
-                        
+
                         this.Items.Add(musicItem);
                         this.FolderSize += file.Length;
                     }
