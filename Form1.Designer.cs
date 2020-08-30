@@ -33,17 +33,18 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryTabContainer = new System.Windows.Forms.TabControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.lblFolderCount = new System.Windows.Forms.Label();
             this.lblFolderSize = new System.Windows.Forms.Label();
             this.lblTotalTime = new System.Windows.Forms.Label();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.addFolderBtn = new System.Windows.Forms.ToolStripButton();
+            this.exportPlaylistBtn = new System.Windows.Forms.ToolStripButton();
+            this.exportPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -52,8 +53,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.editToolStripMenuItem});
+            this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(520, 24);
@@ -65,6 +65,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.addFolderToolStripMenuItem,
+            this.exportPlaylistsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -73,27 +74,21 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // addFolderToolStripMenuItem
             // 
             this.addFolderToolStripMenuItem.Name = "addFolderToolStripMenuItem";
-            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addFolderToolStripMenuItem.Text = "Add Folder";
             this.addFolderToolStripMenuItem.Click += new System.EventHandler(this.AddFolder);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
             // 
             // directoryTabContainer
             // 
@@ -164,28 +159,6 @@
             this.label3.Text = "Total Time";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
-            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(520, 38);
-            this.toolStrip1.TabIndex = 4;
-            this.toolStrip1.Text = "Add Folder";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.Image = global::Car_Music_Sort.Properties.Resources.Add_Folder;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(69, 35);
-            this.toolStripButton1.Text = "Add Folder";
-            this.toolStripButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolStripButton1.Click += new System.EventHandler(this.AddFolder);
-            // 
             // lblFolderCount
             // 
             this.lblFolderCount.AutoSize = true;
@@ -222,6 +195,45 @@
             this.lblTotalTime.Text = "0";
             this.lblTotalTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addFolderBtn,
+            this.exportPlaylistBtn});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(520, 38);
+            this.toolStrip1.TabIndex = 4;
+            this.toolStrip1.Text = "Add Folder";
+            // 
+            // addFolderBtn
+            // 
+            this.addFolderBtn.Image = global::Car_Music_Sort.Properties.Resources.Add_Folder;
+            this.addFolderBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addFolderBtn.Name = "addFolderBtn";
+            this.addFolderBtn.Size = new System.Drawing.Size(69, 35);
+            this.addFolderBtn.Text = "Add Folder";
+            this.addFolderBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.addFolderBtn.Click += new System.EventHandler(this.AddFolder);
+            // 
+            // exportPlaylistBtn
+            // 
+            this.exportPlaylistBtn.Image = global::Car_Music_Sort.Properties.Resources.Move_Folder;
+            this.exportPlaylistBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.exportPlaylistBtn.Name = "exportPlaylistBtn";
+            this.exportPlaylistBtn.Size = new System.Drawing.Size(90, 35);
+            this.exportPlaylistBtn.Text = "Export Playlists";
+            this.exportPlaylistBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.exportPlaylistBtn.Click += new System.EventHandler(this.ExportPlaylists);
+            // 
+            // exportPlaylistsToolStripMenuItem
+            // 
+            this.exportPlaylistsToolStripMenuItem.Name = "exportPlaylistsToolStripMenuItem";
+            this.exportPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportPlaylistsToolStripMenuItem.Text = "Export Playlists";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -252,17 +264,18 @@
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.TabControl directoryTabContainer;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton addFolderBtn;
         private System.Windows.Forms.Label lblFolderCount;
         private System.Windows.Forms.Label lblFolderSize;
         private System.Windows.Forms.Label lblTotalTime;
+        private System.Windows.Forms.ToolStripButton exportPlaylistBtn;
+        private System.Windows.Forms.ToolStripMenuItem exportPlaylistsToolStripMenuItem;
     }
 }
 

@@ -43,11 +43,15 @@ namespace Car_Music_Sort
 
                     foreach (FileInfo file in info.EnumerateFiles())
                     {
-                        MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
-
-                        musicListView.Items.Add(musicItem);
                         this.FolderSize += file.Length;
-                        this.FileCount += 1;
+                        if (file.Extension == ".mp3")
+                        {
+                            MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
+
+                            musicListView.Items.Add(musicItem);
+                            
+                            this.FileCount += 1;
+                        }
                     }
                 }));
             }
@@ -57,10 +61,15 @@ namespace Car_Music_Sort
 
                 foreach (FileInfo file in info.EnumerateFiles())
                 {
-                    MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
-                    musicListView.Items.Add(musicItem);
                     this.FolderSize += file.Length;
-                    this.FileCount += 1;
+                    if (file.Extension == ".mp3")
+                    {
+                        MusicListViewItem musicItem = new MusicListViewItem(file.FullName);
+
+                        musicListView.Items.Add(musicItem);
+                        
+                        this.FileCount += 1;
+                    }
                 }
             }
             

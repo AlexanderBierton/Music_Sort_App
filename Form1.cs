@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -59,7 +60,7 @@ namespace Car_Music_Sort
             lblFolderSize.Text = FormatBytes(folderSize);
         }
 
-        private static string FormatBytes(long bytes)
+        private string FormatBytes(long bytes)
         {
             string[] Suffix = { "B", "KB", "MB", "GB" };
             int i;
@@ -70,6 +71,66 @@ namespace Car_Music_Sort
             }
 
             return String.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
+        }
+
+        private void ExportPlaylists (object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.RootFolder = Environment.SpecialFolder.Desktop;
+            dialog.ShowNewFolderButton = true;
+            dialog.Description = "Select the output folder for the exported playlist";
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string exportFolder = dialog.SelectedPath;
+
+                foreach(MusicTabPage page in MusicFolders)
+                {
+                    foreach(MusicListViewItem item in page.musicListView.Items)
+                    {
+                        FileInfo file = new FileInfo(item.filePath);
+                        string newFileName = TrimFileName(file.Name);
+                        
+                    }
+                }
+            }
+        }
+
+        private string TrimFileName(string fileName)
+        {
+            string name = fileName.Substring(0, fileName.LastIndexOf('.'));
+            string extension = fileName.Substring(fileName.LastIndexOf('.'));
+
+            // Trim whitespace from name
+            name = name.Trim();
+            int startChar = 0;
+            
+            foreach (char c in name)
+            {
+                if (Char.IsLetter(c) || c == '(')
+                    break;
+                else
+                    startChar++; ;
+            }
+
+            if (startChar < (name.Length - 1))
+                name = name.Substring(startChar);
+
+            int endChar = name.Length - 1;
+            while (endChar != 0)
+            {
+                if (Char.IsLetter(name[endChar]) || name[endChar] == ')')
+                    break;
+                else
+                    endChar--;
+            }
+
+            if (endChar > 0)
+                name = name.Substring(0, endChar + 1);
+
+            fileName = name + extension;
+
+            return fileName;
         }
     }
 }
