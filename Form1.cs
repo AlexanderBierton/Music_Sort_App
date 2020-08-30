@@ -82,7 +82,7 @@ namespace Car_Music_Sort
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                string exportFolder = dialog.SelectedPath;
+                string exportFolder = dialog.SelectedPath + '\\';
 
                 foreach(MusicTabPage page in MusicFolders)
                 {
@@ -90,6 +90,11 @@ namespace Car_Music_Sort
                     {
                         FileInfo file = new FileInfo(item.filePath);
                         string newFileName = TrimFileName(file.Name);
+
+                        if (File.Exists(exportFolder + newFileName))
+                            continue;
+                        else
+                            file.CopyTo(exportFolder + newFileName);
                         
                     }
                 }
@@ -127,6 +132,9 @@ namespace Car_Music_Sort
 
             if (endChar > 0)
                 name = name.Substring(0, endChar + 1);
+
+            if (fileName == "_45_.mp3")
+                Console.WriteLine(fileName);
 
             fileName = name + extension;
 
